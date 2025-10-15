@@ -1,0 +1,92 @@
+/* ---------- Global Layout ---------- */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 40px;
+}
+
+/* ---------- Page Headers ---------- */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #1565c0;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* ---------- Author Info ---------- */
+p {
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+strong {
+    color: #2c3e50;
+}
+
+/* ---------- Books Section ---------- */
+.book {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px auto;
+    max-width: 700px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book img {
+    width: 90px;
+    height: auto;
+    margin-right: 20px;
+    border-radius: 5px;
+}
+
+.book a {
+    text-decoration: none;
+    color: #1565c0;
+    font-size: 1.1rem;
+}
+
+.book a:hover {
+    text-decoration: underline;
+}
+
+.book p {
+    margin: 5px 0;
+    text-align: left;
+}
+
+/* ---------- Empty State ---------- */
+p:has(strong) + p {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+}
+
+/* ---------- Back Link ---------- */
+a[href*="home"] {
+    display: inline-block;
+    margin-top: 40px;
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+a[href*="home"]:hover {
+    background-color: #0056b3;
+}

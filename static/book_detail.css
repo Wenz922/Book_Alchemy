@@ -1,0 +1,76 @@
+/* ---------- Global Layout ---------- */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 40px;
+}
+
+/* ---------- Book Header ---------- */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+}
+
+/* ---------- Book Container ---------- */
+.book-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 0 auto;
+    max-width: 800px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-container img {
+    width: 180px;
+    height: auto;
+    margin-right: 30px;
+    border-radius: 6px;
+}
+
+.book-container div {
+    flex: 1;
+}
+
+/* ---------- Text Styles ---------- */
+p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+strong {
+    color: #2c3e50;
+}
+
+a {
+    text-decoration: none;
+    color: #1565c0;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Back Link ---------- */
+a[href*="home"] {
+    display: inline-block;
+    margin-top: 40px;
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+a[href*="home"]:hover {
+    background-color: #0056b3;
+}
