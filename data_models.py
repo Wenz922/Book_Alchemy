@@ -12,7 +12,7 @@ class Author(db.Model):
     date_of_death = db.Column(db.Date, nullable=True)
 
     # Relationship to books
-    books = db.relationship('Book', backref='author', lazy=True)
+    books = db.relationship('Book', backref='author', lazy=True, cascade="all, delete")
 
     def __repr__(self):
         return f"<Author {self.id}: {self.name}>"

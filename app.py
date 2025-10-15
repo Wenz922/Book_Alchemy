@@ -127,6 +127,23 @@ def delete_book(book_id):
     return redirect(url_for('home'))
 
 
+@app.route('/author/<int:author_id>/delete', methods=['POST'])
+def delete_author(author_id):
+    try:
+        author = Author.query.get(author_id)
+        author_name = author.name
+
+        # Delete author (SQLAlchemy cascade removes related books)
+        db.session.delete(author)
+        db.session.commit()
+
+        flash(f"Author '{author_name}' and all their books were deleted successfully!")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error occurred while deleting author {author_name}: {e}")
+
+    return redirect(url_for('home'))
+
 
 # Create the tables, only run once!
 #with app.app_context():
