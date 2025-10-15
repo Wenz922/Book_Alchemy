@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
+from datetime import datetime
 import os
 
 from data_models import db, Author, Book
@@ -33,14 +34,17 @@ def add_author():
 
     if request.method == 'POST':
         author_name = request.form.get('name')
-        birth_date = request.form.get('birthdate')
-        date_of_death = request.form.get('date_of_death')
+        birth_date_str = request.form.get('birthdate')
+        date_of_death_str = request.form.get('date_of_death')
 
         if not author_name:
             message = "Please enter a author name and birthdate."
         else:
             try:
-                new_author = Author(name=author_name, birth_date=birth_date, date_of_death=date_of_death or None)
+                birth_date = datetime.strptime(birth_date_str, "%Y-%m-%d").date() if birth_date_str else None
+                date_of_death = datetime.strptime(date_of_death_str, "%Y-%m-%d").date() if date_of_death_str else None
+
+                new_author = Author(name=author_name, birth_date=birth_date, date_of_death=date_of_death)
                 db.session.add(new_author)
                 db.session.commit()
                 message = f"Author {author_name} added successfully!"
@@ -54,7 +58,7 @@ def add_author():
 @app.route('/add_book', methods=['GET', 'POST'])
 def add_book():
     message = ""
-    authors = Author.query.all()
+    authors = Author.query.order_by(Author.name).all()
 
     if request.method == 'POST':
         book_title = request.form.get('title')
@@ -74,7 +78,7 @@ def add_book():
                 db.session.rollback()
                 message = f"An error occurred while adding book {book_title} : {e}"
 
-    return render_template('add_book.html', message=message)
+    return render_template('add_book.html', message=message, authors=authors)
 
 
 
