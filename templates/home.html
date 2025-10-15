@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Library Home</title>
+    </head>
+    <body>
+
+        <h2> My Book Library </h2>
+        {% for book in books %}
+            <div class="book">
+                {% if book.cover_url %}
+                    <img src="{{ book.cover_url }}" alt="Cover for {{ book.title }}">
+                {% endif %}
+                <div>
+                    <h3>{{ book.title }}</h3>
+                    <p><strong>Author:</strong> {{ book.author.name }}</p>
+                    {% if book.publication_year %}
+                        <p><strong>Year:</strong> {{ book.publication_year }}</p>
+                    {% endif %}
+                    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    </body>
+</html>
