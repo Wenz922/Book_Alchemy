@@ -9,6 +9,13 @@
     <body>
 
         <h2> My Book Library </h2>
+        <div class="controls">
+            <strong>Sort by:</strong>
+            <a href="/?sort=title" class="button">Title</a>
+            <a href="/?sort=author" class="button">Author</a>
+            <a href="/?sort=year" class="button">Publication Year</a>
+        </div>
+
         {% for book in books %}
             <div class="book">
                 {% if book.cover_url %}

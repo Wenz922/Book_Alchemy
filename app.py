@@ -16,7 +16,18 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    books = Book.query.all()
+    # Default sort by title
+    sort_by = request.args.get('sort', 'title')
+
+    # SQLAlchemy query and sorting
+    if sort_by == 'title':
+        books = Book.query.order_by(Book.title).all()
+    elif sort_by == 'author':
+        books = Book.query.join(Author).order_by(Author.name).all()
+    elif sort_by == 'publication_year':
+        books = Book.query.order_by(Book.publication_year).all()
+    else:
+        books = Book.query.all()
 
     for book in books:
         if book.isbn:
@@ -25,7 +36,7 @@ def home():
         else:
             book.cover_url = None
 
-    return render_template('home.html', books=books)
+    return render_template('home.html', books=books, sort_by=sort_by)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
