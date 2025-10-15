@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import or_
 from datetime import datetime
 import os
 
@@ -18,25 +18,35 @@ db.init_app(app)
 def home():
     # Default sort by title
     sort_by = request.args.get('sort', 'title')
+    # Search key
+    search_query = request.args.get('q', '').strip()
+    query = Book.query.join(Author)
 
     # SQLAlchemy query and sorting
+    if search_query:
+        query = query.filter(or_(
+            Book.title.ilike(f'%{search_query}%'),
+            Book.isbn.ilike(f"%{search_query}%"),
+            Author.name.ilike(f'%{search_query}%')))
+
     if sort_by == 'title':
-        books = Book.query.order_by(Book.title).all()
+        query = query.order_by(Book.title)
     elif sort_by == 'author':
-        books = Book.query.join(Author).order_by(Author.name).all()
-    elif sort_by == 'publication_year':
-        books = Book.query.order_by(Book.publication_year).all()
-    else:
-        books = Book.query.all()
+        query = query.order_by(Author.name)
+    elif sort_by == 'year':
+        query = query.order_by(Book.publication_year)
+
+    books = query.all()
 
     for book in books:
-        if book.isbn:
-            # Use OpenLibrary cover API
-            book.cover_url = f"https://covers.openlibrary.org/b/isbn/{book.isbn}-M.jpg"
-        else:
-            book.cover_url = None
+        # Use OpenLibrary cover API
+        book.cover_url = f"https://covers.openlibrary.org/b/isbn/{book.isbn}-M.jpg" if book.isbn else None
 
-    return render_template('home.html', books=books, sort_by=sort_by)
+    message = ""
+    if search_query and not books:
+        message = f"No books found for {search_query}."
+
+    return render_template('home.html', books=books, sort_by=sort_by, message=message, search_query=search_query)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])

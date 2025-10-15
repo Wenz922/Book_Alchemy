@@ -9,12 +9,22 @@
     <body>
 
         <h2> My Book Library </h2>
+
+        <form method="get" action="/" class="search-box">
+            <input type="text" name="q" placeholder="Search by title, author, or ISBN" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+
         <div class="controls">
             <strong>Sort by:</strong>
             <a href="/?sort=title" class="button">Title</a>
             <a href="/?sort=author" class="button">Author</a>
-            <a href="/?sort=year" class="button">Publication Year</a>
+            <a href="/?sort=year" class="button">Year</a>
         </div>
+
+        {% if message %}
+            <p><strong>{{ message }}</strong></p>
+        {% endif %}
 
         {% for book in books %}
             <div class="book">
