@@ -40,8 +40,10 @@
                     <img src="{{ book.cover_url }}" alt="Cover for {{ book.title }}">
                 {% endif %}
                 <div>
-                    <h3>{{ book.title }}</h3>
-                    <p><strong>Author:</strong> {{ book.author.name }}</p>
+                    <h3><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h3>
+                    <p><strong>Author:</strong>
+                        <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a>
+                    </p>
 
                     <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
                         <button type="submit">Delete Author</button>

@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from datetime import datetime
 import os
@@ -48,6 +47,28 @@ def home():
         message = f"No books found for {search_query}."
 
     return render_template('home.html', books=books, sort_by=sort_by, message=message, search_query=search_query)
+
+
+@app.route('/book/<int:book_id>')
+def book_detail(book_id):
+    book = Book.query.get(book_id)
+
+    # Add cover image URL
+    book.cover_url = f"https://covers.openlibrary.org/b/isbn/{book.isbn}-L.jpg" if book.isbn else None
+
+    return render_template('book_detail.html', book=book)
+
+
+@app.route('/author/<int:author_id>')
+def author_detail(author_id):
+    author = Author.query.get(author_id)
+    books = Book.query.filter_by(author_id=author.id).all()
+
+    # Add cover URLs to each book
+    for book in books:
+        book.cover_url = f"https://covers.openlibrary.org/b/isbn/{book.isbn}-M.jpg" if book.isbn else None
+
+    return render_template('author_detail.html', author=author, books=books)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
