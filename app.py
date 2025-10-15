@@ -13,6 +13,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data
 db.init_app(app)
 
 
+@app.route('/')
+def home():
+    books = Book.query.all()
+
+    for book in books:
+        if book.isbn:
+            # Use OpenLibrary cover API
+            book.cover_url = f"https://covers.openlibrary.org/b/isbn/{book.isbn}-M.jpg"
+        else:
+            book.cover_url = None
+
+    return render_template('home.html', books=books)
+
+
 @app.route('/add_author', methods=['GET', 'POST'])
 def add_author():
     message = ""
@@ -61,6 +75,7 @@ def add_book():
                 message = f"An error occurred while adding book {book_title} : {e}"
 
     return render_template('add_book.html', message=message)
+
 
 
 # Create the tables, only run once!
