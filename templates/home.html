@@ -26,6 +26,14 @@
             <p><strong>{{ message }}</strong></p>
         {% endif %}
 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <p><strong>{{ msg }}</strong></p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         {% for book in books %}
             <div class="book">
                 {% if book.cover_url %}
@@ -38,6 +46,10 @@
                         <p><strong>Year:</strong> {{ book.publication_year }}</p>
                     {% endif %}
                     <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+
+                    <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
+                        <button type="submit">Delete Book</button>
+                    </form>
                 </div>
             </div>
         {% endfor %}

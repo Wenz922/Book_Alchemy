@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from datetime import datetime
@@ -8,6 +8,7 @@ from data_models import db, Author, Book
 
 # Create the app
 app = Flask(__name__)
+app.secret_key = "supersecretkey"  # For flash messages
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
@@ -100,6 +101,30 @@ def add_book():
                 message = f"An error occurred while adding book {book_title} : {e}"
 
     return render_template('add_book.html', message=message, authors=authors)
+
+
+@app.route('/<int:book_id>/delete', methods=['POST'])
+def delete_book(book_id):
+    try:
+        delete_book = Book.query.get(book_id)
+        author = delete_book.author  # store reference before deleting book
+
+        db.session.delete(delete_book)
+        db.session.commit()
+
+        # Check if author has any books left
+        remaining_books = Book.query.filter_by(author_id=author.id).count()
+        if remaining_books == 0:
+            db.session.delete(author)
+            db.session.commit()
+            flash(f"Book {delete_book.title} and author {author.name} were deleted successfully!")
+        else:
+            flash(f"Book {delete_book.title} deleted successfully!")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error occurred while deleting book {delete_book.title}: {e}")
+
+    return redirect(url_for('home'))
 
 
 
